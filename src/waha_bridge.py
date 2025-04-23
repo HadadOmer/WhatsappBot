@@ -2,11 +2,12 @@ from common.http_wrapper import send_request
 import os
 import asyncio
 
-WAHA_ADDRESS=os.getenv('WAHA_ADDRESS')
+NOWEB_WAHA_ADDRESS=os.getenv('NOWEB_WAHA_ADDRESS')
+WEBJS_WAHA_ADDRESS=os.getenv('WEBJS_WAHA_ADDRESS')
 
 def reply_private_message(payload):
     async def _send():
-        url = f"{WAHA_ADDRESS}/api/sendText"
+        url = f"{WEBJS_WAHA_ADDRESS}/api/sendText"
         request_type = "POST"
         headers = {
             "accept": "application/json",
@@ -22,7 +23,7 @@ def reply_private_message(payload):
         }
 
         response = await send_request(url, request_type, headers, post_data=post_data)
-        print(f"Status for replying to private message: {response.status}")
+        print(f"Status for replying a private message: {response.status}")
 
     try:
         asyncio.run(_send())
