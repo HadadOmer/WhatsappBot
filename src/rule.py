@@ -32,3 +32,12 @@ class SenderMessageRule(Rule):
             return payload.get("participant", "") == expected_sender
         else:
             return payload.get("from", "") == expected_sender
+        
+class FromMeMessageRule(Rule):
+    def __init__(self, parameters: list[str]):
+        super().__init__(parameters)
+
+    def evaluate(self, payload):
+        if not super().evaluate(payload):
+            return False
+        return payload.get("fromMe", False)
