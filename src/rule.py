@@ -1,5 +1,7 @@
+from typing import Any
+
 class Rule:
-    def __init__(self, parameters: list[str]):
+    def __init__(self, parameters: list[Any]):
         self.parameters = parameters
 
     def evaluate(self, payload):
@@ -9,19 +11,23 @@ class Rule:
         return True
     
 class GroupMessageRule(Rule):
-    def __init__(self, parameters: list[str]):
+    def __init__(self, parameters: list[Any]):
         super().__init__(parameters) 
 
     def evaluate(self, payload):
         if not super().evaluate(payload):
             return False
         from_value = payload.get("from", "")
-        return "g.us" in from_value
+        is_filter_by_group = self.parameters[0] if self.parameters else False
+        if(is_filter_by_group):
+            return from_value == self.parameters[1]
+        else:
+            return "g.us" in from_value
     
 class SenderMessageRule(Rule):
-    def __init__(self, parameters: list[str]):
+    def __init__(self, parameters: list[Any]):
         super().__init__(parameters)
-        self.group_message_rule = GroupMessageRule(parameters)
+        self.group_message_rule = GroupMessageRule([])
 
     def evaluate(self, payload):
         if not super().evaluate(payload):
@@ -34,7 +40,7 @@ class SenderMessageRule(Rule):
             return payload.get("from", "") == expected_sender
         
 class FromMeMessageRule(Rule):
-    def __init__(self, parameters: list[str]):
+    def __init__(self, parameters: list[Any]):
         super().__init__(parameters)
 
     def evaluate(self, payload):

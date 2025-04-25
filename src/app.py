@@ -5,10 +5,11 @@ import os
 from src.waha_bridge import reply_private_message
 
 app = Flask(__name__)
-PHONENUMBER = os.getenv('PHONE_NUMBER')
+PHONE_NUMBER = os.getenv('PHONE_NUMBER')
+GROUP_NUMBER = os.getenv('GROUP_NUMBER')
 
 actions = [
-    Action([SenderMessageRule([f'{PHONENUMBER}@c.us']), GroupMessageRule([])], reply_private_message)
+    Action([SenderMessageRule([f'{PHONE_NUMBER}@c.us']), GroupMessageRule([True ,f'{GROUP_NUMBER}@g.us'])], reply_private_message)
 ]
 
 @app.route('/', methods=['GET'])
